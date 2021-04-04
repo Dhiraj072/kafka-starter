@@ -1,0 +1,19 @@
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+### Secrets ###
+src/main/resources/client_secret*.json
+gradle.properties
+.coveralls.yml
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+/out/
+
+## LOGS ##
+*.log*
+
