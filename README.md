@@ -7,7 +7,7 @@ A tutorial project for [Apache Kafka](https://kafka.apache.org/)
 ### Zookeeper
 Keeps track of all components
 
-`zookeeper-server-start.sh config/zookeeper.properties`
+`$ zookeeper-server-start.sh config/zookeeper.properties`
 ### Kafka server
 The broker service that receives and delivers messages
 
@@ -19,7 +19,7 @@ Service that produces messages
 ### Consumer
 Service that recceives messages
 
-`kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic first_topic --group group-first`
+`$ kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic first_topic --group group-first`
 
 ## Points to note
 * Each topic may have one or more partitions
