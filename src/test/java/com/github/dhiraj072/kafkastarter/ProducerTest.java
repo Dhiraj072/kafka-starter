@@ -1,8 +1,13 @@
 package com.github.dhiraj072.kafkastarter;
 
+import static com.github.dhiraj072.kafkastarter.Consumer.A_VALID_TOPIC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
 import javax.annotation.Resource;
+import org.apache.kafka.clients.producer.RecordMetadata;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -19,18 +24,37 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ProducerTest {
 
-    // A valid topic that should exist on your kafka server
-    private static final String A_VALID_TOPIC = "first_topic";
+    private static final String MSG_KEY = "key_1";
 
     @Resource
     private Producer producer;
 
+    /**
+     * Flush delivered records/refresh producer before each run so that we can assert deterministically
+     */
+    @BeforeEach
+    public void reset() {
+
+        producer.init();
+    }
+
     @Test
     public void sendATestMessage() {
 
-        assertEquals(0, producer.getDeliveredRecords().size());
         producer.sendMessage(A_VALID_TOPIC, "test message");
+        producer.close();
         assertEquals(1, producer.getDeliveredRecords().size());
+    }
+
+    @Test
+    public void sendATestMessageWithKey() {
+
+        producer.sendMessage(MSG_KEY, A_VALID_TOPIC, "test message 1");
+        producer.sendMessage(MSG_KEY, A_VALID_TOPIC, "test message 2");
+        producer.close();
+        List<RecordMetadata> delivered = producer.getDeliveredRecords();
+        assertEquals(2, delivered.size());
+        assertEquals(delivered.get(0).partition(), delivered.get(1).partition());
     }
 
 }

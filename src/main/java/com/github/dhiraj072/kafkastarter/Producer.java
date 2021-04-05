@@ -50,11 +50,29 @@ public class Producer {
             if (exception == null)
                 deliveredRecords.add(metadata);
         });
-        producer.close();
+    }
+
+    /**
+     * Send a message. Note sending a message with a key ensures the message with same key
+     * is delivered to the same partition always.
+     */
+    public void sendMessage(String key, String topic, String msg) {
+
+        ProducerRecord<String, String> record = new ProducerRecord<>(key, topic, msg);
+        producer.send(record, (metadata, exception) -> {
+
+            if (exception == null)
+                deliveredRecords.add(metadata);
+        });
     }
 
     public List<RecordMetadata> getDeliveredRecords() {
 
         return deliveredRecords;
+    }
+
+    public void close() {
+
+        producer.close();
     }
 }
